@@ -1,0 +1,26 @@
+server:
+  port: 8097
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka 
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: livre-service-route
+          uri: lb://LIVRES
+          predicates:
+            - Path=/livres/** 
+        - id: user-service-route
+          uri: lb://USERS-MICROSERVICE
+          predicates:
+            - Path=/users/** 
+      default-filters:
+        - name: DedupeResponseHeader
+          args:
+            Access-Control-Allow-Origin: "*"
+            Access-Control-Allow-Credentials: "true"
